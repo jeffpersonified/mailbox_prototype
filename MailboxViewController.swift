@@ -27,7 +27,6 @@ class MailboxViewController: UIViewController {
 
         inboxScrollView.contentSize = CGSize(width: 320, height: (1202 + 86 + 37 + 42))
         var messagePanRecognizer = UIPanGestureRecognizer(target: self, action: "onMessagePan:")
-        
         messageView.addGestureRecognizer(messagePanRecognizer)
         listTapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onListTap")
         listImageView.addGestureRecognizer(listTapGestureRecognizer)
@@ -66,8 +65,8 @@ class MailboxViewController: UIViewController {
             
             var color: UIColor = UIColor(red: 0.89, green: 0.89, blue: 0.89, alpha: 1)
 
-            leftMessageIconImageView.alpha = (transform.x / 75) - 0.1
-            rightMessageIconImageView.alpha = (-transform.x / 75) - 0.1
+            leftMessageIconImageView.alpha = transform.x / 70 - 0.1
+            rightMessageIconImageView.alpha = -transform.x / 70 - 0.1
             
             self.messageImageView.center.x = messageView.center.x + transform.x
 
@@ -83,10 +82,10 @@ class MailboxViewController: UIViewController {
                 leftMessageIconImageView.image = UIImage(named: "delete_icon")
             }
             
-            if self.messageImageView.frame.origin.x < -60 {
+            if self.messageImageView.frame.origin.x < -60  {
                 println("Later")
                 color = UIColor(red: 1, green: 0.8, blue: 0, alpha: 1)
-                leftMessageIconImageView.image = UIImage(named: "later_icon")
+                rightMessageIconImageView.image = UIImage(named: "later_icon")
             }
             
             if self.messageImageView.frame.origin.x < -200 {
@@ -122,8 +121,7 @@ class MailboxViewController: UIViewController {
                     animations: {
                         self.messageImageView.frame.origin.x += 320
                 }, completion: nil)
-            } else if self.messageImageView.frame.origin.x < -60 &&
-                      self.messageImageView.frame.origin.x > -260 {
+            } else if self.messageImageView.frame.origin.x < -60 && self.messageImageView.frame.origin.x > -200 {
                 println("Later Ended")
                 UIView.animateWithDuration(
                     0.4,
@@ -135,7 +133,7 @@ class MailboxViewController: UIViewController {
                             self.rescheduleImageView.alpha = 1.0
                             }, completion: nil)
                 })
-            } else if self.messageImageView.frame.origin.x < -260 {
+            } else if self.messageImageView.frame.origin.x < -200 {
                 println("Categorize Ended")
                 UIView.animateWithDuration(
                     0.4,
@@ -144,7 +142,7 @@ class MailboxViewController: UIViewController {
                     }, completion: { (finished: Bool) in
                         self.view.bringSubviewToFront(self.listImageView)
                         UIView.animateWithDuration(0.25, animations: {
-                            self.rescheduleImageView.alpha = 1.0
+                            self.listImageView.alpha = 1.0
                         }, completion: nil)
                 })
             
